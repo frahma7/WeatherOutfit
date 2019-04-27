@@ -14,6 +14,9 @@ class App extends Component {
       error: undefined
   }
 
+  getFerenheit = () =>{
+
+  }
   getWeather = async(e) => {
     e.preventDefault();
     var city = e.target.elements.city.value;
@@ -75,8 +78,8 @@ class App extends Component {
         </p>
 
         <p>
-          {this.state.temperature && this.state.temperature > 15 && <h3>Wear A T-shirt and Jeans!</h3>}
-          {this.state.temperature && this.state.temperature <= 15 && <h3>Wear A Sweater and Jeans!</h3>}
+          {this.state.temperature && (this.state.temperature* (9/5) + 32) > 15 && <h3>Wear A T-shirt and Jeans!  {(this.state.temperature* (9/5) + 32)}</h3>}
+          {this.state.temperature && (this.state.temperature* (9/5) + 32) <= 15 && <h3>Wear A Sweater and Jeans! {(this.state.temperature* (9/5) + 32)} </h3>}
         </p>
 
       </div>
