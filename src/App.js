@@ -24,7 +24,7 @@ class App extends Component {
     e.preventDefault();
     var url = "http://localhost:3001/api/get";
     await axios.get(url).then((response) => {
-      console.log(response);
+      console.log(response );
        this.setState({
         stuff: response.data
        });
@@ -34,7 +34,7 @@ class App extends Component {
   };
 
   render() {
-    const { data } = this.state.stuff;
+    const { data } = this.state;
     return (
       <div>
 
@@ -46,7 +46,7 @@ class App extends Component {
         onClick={this.getData.bind(this)}>GET</button>
 
         <ul>
-
+        
         </ul>
 
         <ClothingImages />
