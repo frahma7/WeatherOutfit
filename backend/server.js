@@ -35,19 +35,27 @@ app.use(logger("dev"));
 // this is our get method
 // this method fetches all available data in our database
 router.get("/get", (req, res) => {
+  var rWhere = req.query.where ? JSON.parse(req.query.where) : null;
   Clothing.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
-  });
+  }).where(rWhere);
 });
 
-// this is our update method
+function createSchema(request){
+  return userSchema = {
+    name: request.body.name,
+    minTemp: request.body.minTemp,
+  };
+}
+
+
+// post
 // this method overwrites existing data in our database
-router.post("/update", (req, res) => {
-  const { id, update } = req.body;
-  Clothing.findOneAndUpdate(id, update, err => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
+router.post("/post", (req, res) => {
+  Clothing.create(createSchema(req), (error, clothings) => {
+    if (error) return res.json({ success: false, error: error });
+    return res.json({ success: true, data: clothings });
   });
 });
 
