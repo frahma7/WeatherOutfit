@@ -3,7 +3,7 @@ const express = require('express');
 var cors = require('cors');
 const bodyParser = require('body-parser');
 const logger = require('morgan');
-const clothingSchema = require('./PictureSchema');
+const Clothing = require('./clothingSchema');
 
 const API_PORT = 3001;
 const app = express();
@@ -51,26 +51,6 @@ router.post("/update", (req, res) => {
   });
 });
 
-// this is our create methid
-// this method adds new data in our database
-router.post("/put", (req, res) => {
-  let data = new Clothing();
-
-  const { id, message } = req.body;
-
-  if ((!id && id !== 0) || !message) {
-    return res.json({
-      success: false,
-      error: "INVALID INPUTS"
-    });
-  }
-  data.message = message;
-  data.id = id;
-  data.save(err => {
-    if (err) return res.json({ success: false, error: err });
-    return res.json({ success: true });
-  });
-});
 
 // append /api for our http requests
 app.use("/api", router);
