@@ -5,6 +5,9 @@
   //So go over each section of the database that query for this
   // show one upper wear, bottom wear, and shoes
   import React, { Component } from 'react';
+  import {Alert, InputGroup, FormControl,
+          Form, Button, Card} from 'react-bootstrap';
+
   const API_KEY = "5ec90a252ff61a72d9f2944a402d7f8a";
 
   export default class ClothingImages extends React.Component{
@@ -58,22 +61,51 @@
 
       return(
           <div >
-            <form onSubmit = {this.getWeather}>
-              <input type = "text" name = "city" placeholder = "City..."/>
-              <input type = "text" name = "country" placeholder = "Country..."/>
-              <button> Get Weather </button>
-            </form>
-            <p>
-              {this.state.city && <p> City: {this.state.city} </p> }
-              {this.state.country && <p> Country: {this.state.country} </p> }
-              {this.state.temperature && <p> Temperature: {(this.state.temperature* (9/5) + 32)} Degrees Farenheit </p> }
-              {this.state.humidity && <p> Humidity: {this.state.humidity} </p> }
-              {this.state.description && <p> Description: {this.state.description} </p> }
-              {this.state.error && <p> Error: {this.state.error} </p> }
-            </p>
-            {this.state.temperature && (this.state.temperature* (9/5) + 32)  > 75 && <h3>Wear something comfortable!  {(this.state.temperature* (9/5) + 32)}</h3>}
-            {this.state.temperature && (this.state.temperature* (9/5) + 32)  >= 50 && (this.state.temperature* (9/5) + 32)  <= 75 && <h3> Wear something that keeps you warm! {(this.state.temperature* (9/5) + 32)} </h3>}
-            {this.state.temperature && (this.state.temperature* (9/5) + 32)  < 50 && <h3> Stay Warm! {(this.state.temperature* (9/5) + 32)} </h3>}
+            <Form onSubmit = {this.getWeather}>
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="basic-addon1">City</InputGroup.Text>
+                </InputGroup.Prepend>
+
+                <FormControl
+                  name='city'
+                  placeholder="City"
+                  aria-label="City"
+                  aria-describedby="basic-addon1"
+                />
+              </InputGroup>
+
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text id="basic-addon1">Country</InputGroup.Text>
+                </InputGroup.Prepend>
+
+                <FormControl
+                  name='country'
+                  placeholder="Country"
+                  aria-label="Country"
+                  aria-describedby="basic-addon1"
+                />
+              </InputGroup>
+              <Button type="submit"> Create Outfit </Button>
+            </Form>
+
+            <br/>
+
+          {this.state &&  <Card>
+              <Card.Body>
+                {this.state.city && this.state.country && <Card.Title> {this.state.city}, {this.state.country}</Card.Title>}
+                <Card.Text>
+                {this.state.temperature && <p> Temperature: {Math.round((this.state.temperature* (9/5) + 32))} &#8457; </p> }
+                {this.state.humidity && <p> Humidity: {this.state.humidity} </p> }
+                {this.state.description && <p> Description: {this.state.description} </p> }
+                {this.state.error && <Alert variant='danger'> Error: {this.state.error} </Alert> }
+                {this.state.temperature && (this.state.temperature* (9/5) + 32)  > 75 && <h3>Wear something comfortable! It's {Math.round((this.state.temperature* (9/5) + 32))} &#8457;</h3>}
+                {this.state.temperature && (this.state.temperature* (9/5) + 32)  >= 50 && (this.state.temperature* (9/5) + 32)  <= 75 && <h3> Wear something that keeps you warm! It's {Math.round((this.state.temperature* (9/5) + 32))} &#8457; </h3>}
+                {this.state.temperature && (this.state.temperature* (9/5) + 32)  < 50 && <h3> Stay Warm! It's {Math.round((this.state.temperature* (9/5) + 32))} &#8457; </h3>}
+                </Card.Text>
+              </Card.Body>
+            </Card>}
           </div>
       );
     }

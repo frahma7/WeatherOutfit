@@ -7,22 +7,27 @@ var ClothingSchema = new mongoose.Schema({
       type: String,
       required: [true, "Article required"]
     },
+
     minTemp: {
       type: Number,
       required: [true, "min required"]
     },
+    
     maxTemp: {
       type: Number,
       required: [true, "max required"]
     },
+
     gender: {
       type: String,
       required: [true, "gender required"]
     },
+
     assignedUserName: {
       type: String,
       default: "unassigned"
     },
+
     dateCreated: {
       type: Date,
       default: Date.now
