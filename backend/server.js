@@ -43,9 +43,13 @@ router.get("/get", (req, res) => {
 });
 
 function createSchema(request){
-  return userSchema = {
+  return clothingSchema = {
     name: request.body.name,
+    article: request.body.article,
     minTemp: request.body.minTemp,
+    maxTemp: request.body.maxTemp,
+    gender: request.body.gender,
+    reference: request.body.reference,
   };
 }
 
