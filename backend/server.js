@@ -35,7 +35,7 @@ app.use(logger("dev"));
 // this is our get method
 // this method fetches all available data in our database
 router.get("/get", (req, res) => {
-  clothingSchema.find((err, data) => {
+  Clothing.find((err, data) => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true, data: data });
   });
@@ -45,7 +45,7 @@ router.get("/get", (req, res) => {
 // this method overwrites existing data in our database
 router.post("/update", (req, res) => {
   const { id, update } = req.body;
-  clothingSchema.findOneAndUpdate(id, update, err => {
+  Clothing.findOneAndUpdate(id, update, err => {
     if (err) return res.json({ success: false, error: err });
     return res.json({ success: true });
   });
