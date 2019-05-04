@@ -89,7 +89,7 @@
 
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
-                  <InputGroup.Text id="basic-addon1">Country</InputGroup.Text>
+                  <InputGroup.Text id="basic-addon1">Country or State</InputGroup.Text>
                 </InputGroup.Prepend>
 
                 <FormControl
