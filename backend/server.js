@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const logger = require('morgan');
 const Clothing = require('./clothingSchema');
 
+
 const API_PORT = 3001;
 const app = express();
 app.use(cors());
@@ -43,14 +44,16 @@ router.get("/get", (req, res) => {
 });
 
 function createSchema(request){
-  return clothingSchema = {
+   var clothingSchema = new Clothing({
     name: request.body.name,
     article: request.body.article,
     minTemp: request.body.minTemp,
     maxTemp: request.body.maxTemp,
     gender: request.body.gender,
     reference: request.body.reference,
-  };
+  });
+
+  return clothingSchema;
 }
 
 

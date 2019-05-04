@@ -7,10 +7,20 @@
   import React, { Component } from 'react';
   import {Alert, InputGroup, FormControl,
           Form, Button, Card} from 'react-bootstrap';
+  import fire from '../config/Fire'
 
   const API_KEY = "5ec90a252ff61a72d9f2944a402d7f8a";
 
   export default class ClothingImages extends React.Component{
+    constructor(props){
+      super(props);
+      this.logout= this.logout.bind(this);
+    }
+  
+    logout(){
+      fire.auth().signOut();
+    }
+
     state = {
         city:undefined,
         country:undefined,
@@ -20,9 +30,7 @@
         error: undefined
     }
 
-    getFerenheit = () =>{
 
-    }
     getWeather = async(e) => {
       e.preventDefault();
       var city = e.target.elements.city.value;
@@ -60,7 +68,11 @@
     render(){
 
       return(
-          <div >
+        <div>
+            <Button variant='danger' style={{position:'absolute', top:'5%', left:'90%', transform: 'translate(-50%, -10%)'}} onClick={this.logout}> logout </Button>
+
+          <div style={{position:'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)'}} >
+          <h1> Weather Wardrobe </h1>
             <Form onSubmit = {this.getWeather}>
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
@@ -87,12 +99,12 @@
                   aria-describedby="basic-addon1"
                 />
               </InputGroup>
-              <Button type="submit"> Create Outfit </Button>
+              <Button style={{width:'45%', display: 'absolute', left: '50%', transform: 'translate(60%, -10%)'}} type="submit"> Create Outfit </Button>
             </Form>
 
             <br/>
 
-          {this.state &&  <Card>
+          {this.state &&  <Card style={{border:'hidden'}}>
               <Card.Body>
                 {this.state.city && this.state.country && <Card.Title> {this.state.city}, {this.state.country}</Card.Title>}
                 <Card.Text>
@@ -106,6 +118,8 @@
                 </Card.Text>
               </Card.Body>
             </Card>}
+            
+            </div>
           </div>
       );
     }

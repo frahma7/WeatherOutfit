@@ -1,18 +1,27 @@
 import React, { Component } from 'react';
 import './App.css';
 import axios from 'axios';
-import ClothingImages from './components/WeatherLogic.js'
+import WeatherLogic from './components/WeatherLogic.js'
+import Login from './components/Login'
+import fire from './config/Fire'
+
+
 const API_KEY = "5ec90a252ff61a72d9f2944a402d7f8a";
 
 class WeatherOutfit extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       stuff: [],
     };
+    this.getUser = this.getUser.bind(this);
+
   }
 
+  getUser(){
+    fire.getInstance.currentUser(this.state.user);
+  }
   // getDataFromDb = () => {
   //     fetch("http://localhost:3001/api/get")
   //       .then(data => data.json())
@@ -25,7 +34,7 @@ class WeatherOutfit extends Component {
     await axios.get(url).then((response) => {
       console.log(response);
        this.setState({
-        stuff: response.data
+        stuff: response.data.data
        });
     }).catch((error) => {
       console.log(error);
@@ -33,20 +42,19 @@ class WeatherOutfit extends Component {
   };
 
   render() {
-    const { data } = this.state;
+    const  data  = this.state.stuff;
     return (
-      <div>
+      <div >
 
-        <h1> Weather Wardrobe </h1>
 
-        <button className="btn btn-success" style={{margin:'15px',width:'100px'}}
-        onClick={this.getData.bind(this)}>GET</button>
+        {/* <button className="btn btn-success" style={{margin:'15px',width:'100px'}}
+        onClick={this.getData.bind(this)}>GET</button> */}
 
         <ul>
 
         </ul>
 
-        <ClothingImages />
+        <WeatherLogic />
 
 
       </div>

@@ -4,7 +4,8 @@ var mongoose = require('mongoose');
 // Define our user schema
 let Schema = mongoose.Schema;
 const clothingSchema = new Schema({
-    //sweater, pants, shirts, shorts, skirts, boots, shoes
+    //tops: sweater, pants, shirts, 
+    //bottom: shorts, skirts, boots, shoes
     name: {
       type: String,
       required: true
@@ -16,12 +17,12 @@ const clothingSchema = new Schema({
     },
     //winter -100
     //spring/fall 50
-    //summer 75
+    //summer 76
     minTemp: {
       type: Number,
       required: [true, "min required"]
     },
-    //winter 50
+    //winter 49
     //spring/fall 75
     //summer 200
     maxTemp: {
@@ -40,7 +41,7 @@ const clothingSchema = new Schema({
     //link to google drive
     reference: {
       type: String,
-      require: true
+      required: [true, "ref required"]
     },
     dateCreated: {
       type: Date,
