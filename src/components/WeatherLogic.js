@@ -8,6 +8,8 @@
   import {Alert, InputGroup, FormControl,
           Form, Button, Card} from 'react-bootstrap';
   import fire from '../config/Fire'
+  import axios from 'axios';
+
 
   const API_KEY = "5ec90a252ff61a72d9f2944a402d7f8a";
 
@@ -16,12 +18,14 @@
       super(props);
       this.logout= this.logout.bind(this);
     }
-  
+
     logout(){
       fire.auth().signOut();
     }
 
     state = {
+        clothing: {},
+        gender: "male",
         city:undefined,
         country:undefined,
         temperature:undefined,
@@ -29,9 +33,29 @@
         description: undefined,
         error: undefined
     }
+    setMale = async(e) =>{
+      e.preventDefault();
+        this.setState({
+          gender: "male"
+        });
+        console.log(this.state.gender)
+    }
 
+    setFemale = async(e) =>{
+      e.preventDefault();
+        this.setState({
+          gender: "female"
+        });
+        console.log(this.state.gender)
+    }
 
-    getWeather = async(e) => {
+    async getAllData(e) {
+      e.preventDefault();
+      await this.getWeather(e);
+      await this.getClothing(e);
+    };
+
+    async getWeather(e) {
       e.preventDefault();
       var city = e.target.elements.city.value;
       var country = e.target.elements.country.value;
@@ -61,11 +85,43 @@
 
     }
 
-    getClothing = async(e) => {
+    async getClothing(e){
       e.preventDefault();
+      var url = "http://localhost:3001/api/get";
+      await axios.get(url).then((response) => {
+        console.log(response);
+         this.setState({
+          clothing: response.data.data
+         });
+      }).catch((error) => {
+        console.log(error);
+      });
+
 
     }
+
     render(){
+      var outfit=[];
+      const clothes=this.state.clothing;
+      for(var i=0; i<this.state.clothing.length; i++){
+        // var image_url="'";
+        // image_url+=clothes[i].reference;
+        // image_url+="'";
+        var image_url=clothes[i].reference;
+
+
+
+        console.log(image_url)
+        outfit.push(
+          <Card style={{ width: '18rem' }}>
+            <Card.Img variant="top" src={image_url} />
+            <Card.Body>
+              <Card.Title>{clothes[i].article}</Card.Title>
+              <Card.Subtitle>{clothes[i].name}</Card.Subtitle>
+            </Card.Body>
+          </Card>
+        )
+      }
 
       return(
         <div>
@@ -73,7 +129,7 @@
 
           <div style={{position:'absolute', top:'50%', left:'50%', transform: 'translate(-50%, -50%)'}} >
           <h1> Weather Wardrobe </h1>
-            <Form onSubmit = {this.getWeather}>
+            <Form onSubmit = {this.getAllData.bind(this)}>
               <InputGroup className="mb-3">
                 <InputGroup.Prepend>
                   <InputGroup.Text id="basic-addon1">City</InputGroup.Text>
@@ -99,6 +155,8 @@
                   aria-describedby="basic-addon1"
                 />
               </InputGroup>
+              <Button type="submit" onClick={this.setMale}> Male </Button>
+              <Button type="submit" onClick={this.setFemale}> Female </Button>
               <Button style={{width:'45%', display: 'absolute', left: '50%', transform: 'translate(60%, -10%)'}} type="submit"> Create Outfit </Button>
             </Form>
 
@@ -118,7 +176,9 @@
                 </Card.Text>
               </Card.Body>
             </Card>}
-            
+
+            {outfit}
+
             </div>
           </div>
       );
