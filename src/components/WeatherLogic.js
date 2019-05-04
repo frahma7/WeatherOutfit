@@ -25,7 +25,7 @@
 
     state = {
         clothing: {},
-        gender: "male",
+        gender: "Male",
         city:undefined,
         country:undefined,
         temperature:undefined,
@@ -36,7 +36,7 @@
     setMale = async(e) =>{
       e.preventDefault();
         this.setState({
-          gender: "male"
+          gender: "Male"
         });
         console.log(this.state.gender)
     }
@@ -44,7 +44,7 @@
     setFemale = async(e) =>{
       e.preventDefault();
         this.setState({
-          gender: "female"
+          gender: "Female"
         });
         console.log(this.state.gender)
     }
@@ -65,7 +65,7 @@
 
       if(city && country && data.name){
         this.setState({
-          temperature: data.main.temp,
+          temperature: (data.main.temp * (9/5) + 32),
           city: data.name,
           country: data.sys.country,
           humidity: data.main.humidity,
@@ -87,14 +87,35 @@
 
     async getClothing(e){
       e.preventDefault();
-      var url = "http://localhost:3001/api/get";
+      var clothingItems = [];
+      //top
+      let url = this.state.gender == "Male" ? `http://localhost:3001/api/get?where={ "$and" : [ {"article" : "Top"}, {"minTemp": {"$lte": ${this.state.temperature}} }, {"maxTemp": {"$gte": ${this.state.temperature}} } , {"gender" :  "Male" }   ] }` :
+                                              `http://localhost:3001/api/get?where={ "$and" : [ {"article" : "Top"}, {"minTemp": {"$lte": ${this.state.temperature}} }, {"maxTemp": {"$gte": ${this.state.temperature}} } , {"gender" :  "Female" }  ] }`;
       await axios.get(url).then((response) => {
-        console.log(response);
-         this.setState({
-          clothing: response.data.data
-         });
+        clothingItems.push(response.data.data[0]);
       }).catch((error) => {
         console.log(error);
+      });
+
+      //bottom
+      url = this.state.gender     == "Male" ? `http://localhost:3001/api/get?where={ "$and" : [ {"article" : "Bottom"}, {"minTemp": {"$lte": ${this.state.temperature}} }, {"maxTemp": {"$gte": ${this.state.temperature}} } , {"gender" :  "Male" }   ] }` :
+                                              `http://localhost:3001/api/get?where={ "$and" : [ {"article" : "Bottom"}, {"minTemp": {"$lte": ${this.state.temperature}} }, {"maxTemp": {"$gte": ${this.state.temperature}} } , {"gender" :  "Female" }  ] }`;
+      await axios.get(url).then((response) => {
+        clothingItems.push(response.data.data[0]);
+      }).catch((error) => {
+        console.log(error);
+      });
+
+      //shoes
+      url = this.state.gender    == "Male" ? `http://localhost:3001/api/get?where={ "$and" : [ {"article" : "Shoes"}, {"minTemp": {"$lte": ${this.state.temperature}} }, {"maxTemp": {"$gte": ${this.state.temperature}} } , {"gender" :  "Male" }   ] }` :
+                                              `http://localhost:3001/api/get?where={ "$and" : [ {"article" : "Shoes"}, {"minTemp": {"$lte": ${this.state.temperature}} }, {"maxTemp": {"$gte": ${this.state.temperature}} } , {"gender" :  "Female" }  ] }`;
+      await axios.get(url).then((response) => {
+        clothingItems.push(response.data.data[0]);
+      }).catch((error) => {
+        console.log(error);
+      });
+      await this.setState({
+       clothing: clothingItems
       });
 
 
@@ -103,6 +124,8 @@
     render(){
       var outfit=[];
       const clothes=this.state.clothing;
+      console.log("clothes");
+      console.log(clothes);
       for(var i=0; i<this.state.clothing.length; i++){
         // var image_url="'";
         // image_url+=clothes[i].reference;
@@ -114,7 +137,7 @@
         console.log(image_url)
         outfit.push(
           <Card style={{ width: '18rem' }}>
-            <Card.Img variant="top" src={image_url} />
+            <Card.Img variant="bottom" src={image_url} />
             <Card.Body>
               <Card.Title>{clothes[i].article}</Card.Title>
               <Card.Subtitle>{clothes[i].name}</Card.Subtitle>
@@ -166,19 +189,20 @@
               <Card.Body>
                 {this.state.city && this.state.country && <Card.Title> {this.state.city}, {this.state.country}</Card.Title>}
                 <Card.Text>
-                {this.state.temperature && <p> Temperature: {Math.round((this.state.temperature* (9/5) + 32))} &#8457; </p> }
+                {this.state.temperature && <p> Temperature: {Math.round(this.state.temperature)} &#8457; </p> }
                 {this.state.humidity && <p> Humidity: {this.state.humidity} </p> }
                 {this.state.description && <p> Description: {this.state.description} </p> }
                 {this.state.error && <Alert variant='danger'> Error: {this.state.error} </Alert> }
-                {this.state.temperature && (this.state.temperature* (9/5) + 32)  > 75 && <h3>Wear something comfortable! It's {Math.round((this.state.temperature* (9/5) + 32))} &#8457;</h3>}
-                {this.state.temperature && (this.state.temperature* (9/5) + 32)  >= 50 && (this.state.temperature* (9/5) + 32)  <= 75 && <h3> Wear something that keeps you warm! It's {Math.round((this.state.temperature* (9/5) + 32))} &#8457; </h3>}
-                {this.state.temperature && (this.state.temperature* (9/5) + 32)  < 50 && <h3> Stay Warm! It's {Math.round((this.state.temperature* (9/5) + 32))} &#8457; </h3>}
+                {this.state.temperature && this.state.temperature  > 75 && <h3>Wear something comfortable! It's {Math.round(this.state.temperature)} &#8457;</h3>}
+                {this.state.temperature && this.state.temperature  >= 50 && this.state.temperature  <= 75 && <h3> Wear something that keeps you warm! It's {Math.round((this.state.temperature* (9/5) + 32))} &#8457; </h3>}
+                {this.state.temperature && this.state.temperature  < 50 && <h3> Stay Warm! It's {Math.round(this.state.temperature)} &#8457; </h3>}
                 </Card.Text>
               </Card.Body>
-            </Card>}
-
-            {outfit}
-
+            </Card>
+          }
+          </div>
+            <div>
+              {outfit}
             </div>
           </div>
       );
