@@ -194,7 +194,7 @@
                 {this.state.description && <p> Description: {this.state.description} </p> }
                 {this.state.error && <Alert variant='danger'> Error: {this.state.error} </Alert> }
                 {this.state.temperature && this.state.temperature  > 75 && <h3>Wear something comfortable! It's {Math.round(this.state.temperature)} &#8457;</h3>}
-                {this.state.temperature && this.state.temperature  >= 50 && this.state.temperature  <= 75 && <h3> Wear something that keeps you warm! It's {Math.round((this.state.temperature* (9/5) + 32))} &#8457; </h3>}
+                {this.state.temperature && this.state.temperature  >= 50 && this.state.temperature  <= 75 && <h3> Wear something that keeps you warm! It's {Math.round(this.state.temperature)} &#8457; </h3>}
                 {this.state.temperature && this.state.temperature  < 50 && <h3> Stay Warm! It's {Math.round(this.state.temperature)} &#8457; </h3>}
                 </Card.Text>
               </Card.Body>
